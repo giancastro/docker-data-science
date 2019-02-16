@@ -1,4 +1,5 @@
-FROM ubuntu:16.04
+ARG BASE_CONTAINER=ubuntu:16.04
+FROM $BASE_CONTAINER
 
 RUN apt-get update && apt-get -yq dist-upgrade \
 && apt-get install -yq --no-install-recommends \
