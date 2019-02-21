@@ -18,5 +18,4 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
     
 # Install jupyter notebook
-RUN pip3 install jupyter \
-         jupyter_contrib_nbextensions
+RUN pip3 install jupyter
