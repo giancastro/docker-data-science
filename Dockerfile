@@ -52,7 +52,8 @@ RUN pip3.7 install jupyter_contrib_nbextensions \
                    sqlalchemy \
                    beautifulsoup4 \
                    datetime \
-                   findspark
+                   findspark \
+                   pyspark
                   
 # Enable nbextension and extensions
 RUN jupyter contrib nbextension install && \
