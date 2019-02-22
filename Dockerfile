@@ -17,7 +17,8 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     libgdbm-dev \
     libc6-dev \
     libbz2-dev \
-    libffi-dev
+    libffi-dev \
+    default-jdk
     
 # Install Python 3.7.2
 RUN cd /tmp && \
@@ -27,8 +28,17 @@ RUN cd /tmp && \
     ./configure --enable-optimizations && \
     make altinstall && \
     pip3.7 install --upgrade pip
-       
-# Install jupyter
+
+# Install Spark
+RUN wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz && \
+    tar -xzf spark-2.4.0-bin-hadoop2.7.tgz && \
+    rm spark-2.4.0-bin-hadoop2.7.tgz && \
+    mv spark-2.4.0-bin-hadoop2.7 /opt/spark-2.4.0 && \
+    ln -s /opt/spark-2.4.0 /opt/spark && \
+    export SPARK_HOME=/opt/spark && \
+    export PATH=$SPARK_HOME/bin:$PATH
+
+# Install Jupyter
 RUN pip3.7 install jupyter
 
 # Install Python Packages
@@ -41,7 +51,8 @@ RUN pip3.7 install jupyter_contrib_nbextensions \
                    sympy \
                    sqlalchemy \
                    beautifulsoup4 \
-                   datetime
+                   datetime \
+                   findspark
                   
 # Enable nbextension and extensions
 RUN jupyter contrib nbextension install && \
