@@ -27,8 +27,7 @@ RUN cd /tmp && \
     ./configure --enable-optimizations && \
     make altinstall && \
     pip3.7 install --upgrade pip
-    
-    
+       
 # Install jupyter
 RUN pip3.7 install jupyter
 
