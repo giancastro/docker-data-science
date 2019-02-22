@@ -41,11 +41,17 @@ RUN pip3.7 install jupyter_contrib_nbextensions \
                    sympy \
                    sqlalchemy \
                    beautifulsoup4 \
-                   datetime
+                   datetime \
+                   tini
                   
 # Enable nbextension
 RUN jupyter contrib nbextension install
 
 # Generate jupyter notebook config
-#RUN jupyter notebook --generate-config
+RUN jupyter notebook --generate-config
 #    jupyter notebook --no-browser --allow-root
+
+ENTRYPOINT ["/usr/bin/tini", "--"]
+
+EXPOSE 8888
+CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--allow-root", "--ip=0.0.0.0"]
