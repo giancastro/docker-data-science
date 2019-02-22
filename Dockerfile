@@ -44,3 +44,9 @@ RUN pip3.7 install jupyter_contrib_nbextensions \
                    beautifulsoup4 \
                    datetime
                   
+# Enable nbextension
+RUN jupyter contrib nbextension install
+
+# Generate jupyter notebook config
+RUN jupyter notebook --generate-config \
+    jupyter notebook --no-browser --allow-root
