@@ -43,8 +43,24 @@ RUN pip3.7 install jupyter_contrib_nbextensions \
                    beautifulsoup4 \
                    datetime
                   
-# Enable nbextension
-RUN jupyter contrib nbextension install
+# Enable nbextension and extensions
+RUN jupyter contrib nbextension install && \
+    jupyter nbextension enable hinterland/hinterland && \
+    jupyter nbextension enable autosavetime/main && \
+    jupyter nbextension enable code_prettify/code_prettify && \
+    jupyter nbextension enable help_panel/help_panel && \
+    jupyter nbextension enable scroll_down/main && \
+    jupyter nbextension enable varInspector/main && \
+    jupyter nbextension enable comment-uncomment/main && \
+    jupyter nbextension enable execute_time/ExecuteTime && \
+    jupyter nbextension enable printview/main && \
+    jupyter nbextension enable table_beautifier/main && \
+    jupyter nbextension enable freeze/main && \
+    jupyter nbextension enable hide_input/main && \
+    jupyter nbextension enable keyboard_shortcut_editor/main && \
+    jupyter nbextension enable spellchecker/main && \
+    jupyter nbextension enable scratchpad/main && \
+    jupyter nbextension enable tree-filter/index
 
 # Generate jupyter notebook config
 RUN jupyter notebook --generate-config
