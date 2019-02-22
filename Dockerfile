@@ -27,6 +27,7 @@ RUN cd /tmp && \
     cd Python-3.7.2 && \
     ./configure --enable-optimizations && \
     make altinstall && \
+    ln -s /usr/local/bin/python3.7 /usr/bin/python && \
     pip3.7 install --upgrade pip
 
 # Install Spark
