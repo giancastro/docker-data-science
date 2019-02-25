@@ -8,6 +8,7 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     bzip2 \
     ca-certificates \
     wget \
+    locales \
     build-essential \
     libreadline-gplv2-dev \
     libncursesw5-dev \
@@ -19,7 +20,10 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     libbz2-dev \
     libffi-dev \
     default-jdk
-    
+
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen
+
 # Install Python 3.7.2
 RUN cd /tmp && \
     wget --quiet https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz && \
