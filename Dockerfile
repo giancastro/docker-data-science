@@ -19,7 +19,8 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     libc6-dev \
     libbz2-dev \
     libffi-dev \
-    default-jdk
+    default-jdk \
+    dask
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
