@@ -58,7 +58,8 @@ RUN pip3.7 install jupyter_contrib_nbextensions \
                    beautifulsoup4 \
                    datetime \
                    findspark \
-                   pyspark
+                   pyspark \
+                   requests
                   
 # Enable nbextension and extensions
 RUN jupyter contrib nbextension install && \
