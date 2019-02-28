@@ -19,7 +19,9 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     libc6-dev \
     libbz2-dev \
     libffi-dev \
-    default-jdk
+    default-jdk \
+    nano \
+    vim
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
@@ -60,7 +62,8 @@ RUN pip3.7 install jupyter_contrib_nbextensions \
                    findspark \
                    pyspark \
                    requests \
-                   dask
+                   dask \
+                   yapf
                   
 # Enable nbextension and extensions
 RUN jupyter contrib nbextension install && \
@@ -80,9 +83,20 @@ RUN jupyter contrib nbextension install && \
     jupyter nbextension enable spellchecker/main && \
     jupyter nbextension enable scratchpad/main && \
     jupyter nbextension enable tree-filter/index
-
+    
 # Generate jupyter notebook config
 RUN jupyter notebook --generate-config
+
+# Set personal customization
+RUN cd /root/.jupyter && \
+    touch custom.js && \
+    echo "define(['base/js/namespace','base/js/events'], \
+                 function(IPython, events) {events.on("app_initialized.NotebookApp", \
+                                            function () \
+                                            {IPython.Cell.options_default.cm_config.lineNumbers = true;} \
+                                                     ); \
+                                           } \
+                );" > custom.js
 
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents
 # kernel crashes.
