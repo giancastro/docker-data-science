@@ -20,8 +20,7 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     libbz2-dev \
     libffi-dev \
     default-jdk \
-    nano \
-    vim
+    nano
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
@@ -86,17 +85,6 @@ RUN jupyter contrib nbextension install && \
     
 # Generate jupyter notebook config
 RUN jupyter notebook --generate-config
-
-# Set personal customization
-RUN cd /root/.jupyter && \
-    touch custom.js && \
-    echo "define(['base/js/namespace','base/js/events'], \
-                 function(IPython, events) {events.on("app_initialized.NotebookApp", \
-                                            function () \
-                                            {IPython.Cell.options_default.cm_config.lineNumbers = true;} \
-                                                     ); \
-                                           } \
-                );" > custom.js
 
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents
 # kernel crashes.
