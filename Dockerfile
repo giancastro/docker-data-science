@@ -64,7 +64,8 @@ RUN pip3.7 install jupyter_contrib_nbextensions \
                    requests \
                    dask \
                    yapf \
-                   graphviz
+                   graphviz \
+                   pydotplus
                   
 # Enable nbextension and extensions
 RUN jupyter contrib nbextension install && \
