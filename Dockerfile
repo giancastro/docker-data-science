@@ -20,7 +20,8 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     libbz2-dev \
     libffi-dev \
     default-jdk \
-    nano
+    nano \
+    graphviz
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
@@ -62,7 +63,8 @@ RUN pip3.7 install jupyter_contrib_nbextensions \
                    pyspark \
                    requests \
                    dask \
-                   yapf
+                   yapf \
+                   graphviz
                   
 # Enable nbextension and extensions
 RUN jupyter contrib nbextension install && \
