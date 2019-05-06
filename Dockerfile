@@ -1,14 +1,14 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
-# Install all OS dependencies for notebook server that starts but lacks all
-# features (e.g., download as all possible file formats)
+# Install OS dependencies
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get -yq dist-upgrade \
- && apt-get install -yq --no-install-recommends \
-    bzip2 \
+RUN apt-get update && \ 
+    apt-get -yq dist-upgrade && \
+    apt-get install -yq --no-install-recommends bzip2 \
     ca-certificates \
     wget \
     locales \
+    python3-pip \
     build-essential \
     libreadline-gplv2-dev \
     libncursesw5-dev \
@@ -21,52 +21,52 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     libffi-dev \
     default-jdk \
     nano \
-    graphviz
+    ssh \
+    python3-dev \
+    graphviz && \
+    apt-get clean -y && \
+    rm -rf /var/lib/apt/lists/*
 
+# Setup locale
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
 
-# Install Python 3.7.2
+# Install spark
 RUN cd /tmp && \
-    wget --quiet https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz && \
-    tar xzf Python-3.7.2.tgz && \
-    cd Python-3.7.2 && \
-    ./configure --enable-optimizations && \
-    make altinstall && \
-    ln -s /usr/local/bin/python3.7 /usr/bin/python && \
-    pip3.7 install --upgrade pip
+    wget -q  https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz && \
+         tar xzf spark-2.4.0-bin-hadoop2.7.tgz -C /usr/local && \
+         rm spark-2.4.0-bin-hadoop2.7.tgz
 
-# Install Spark
-RUN wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz && \
-    tar -xzf spark-2.4.0-bin-hadoop2.7.tgz && \
-    rm spark-2.4.0-bin-hadoop2.7.tgz && \
-    mv spark-2.4.0-bin-hadoop2.7 /opt/spark-2.4.0 && \
-    ln -s /opt/spark-2.4.0 /opt/spark && \
-    export SPARK_HOME=/opt/spark && \
+# Setup spark
+RUN cd /usr/local && ln -s spark-2.4.0-bin-hadoop2.7 spark && \
+    export SPARK_HOME=/usr/local/spark && \
     export PATH=$SPARK_HOME/bin:$PATH
 
-# Install Jupyter
-RUN pip3.7 install jupyter
+# Upgrade Pip
+RUN pip3 install --upgrade pip setuptools
 
 # Install Python Packages
-RUN pip3.7 install jupyter_contrib_nbextensions \
-                   pandas \
-                   matplotlib \
-                   scipy \ 
-                   seaborn \
-                   scikit-learn \
-                   sympy \
-                   sqlalchemy \
-                   beautifulsoup4 \
-                   datetime \
-                   findspark \
-                   pyspark \
-                   requests \
-                   dask \
-                   yapf \
-                   graphviz \
-                   pydotplus
-                  
+RUN pip3 install jupyter \
+	         jupyter_contrib_nbextensions \
+	         pandas \
+	         matplotlib \
+	         scipy \ 
+	         seaborn \
+	         scikit-learn \
+	         sympy \
+	         sqlalchemy \
+	         beautifulsoup4 \
+	         datetime \
+	         findspark \
+	         pyspark \
+	         requests \
+	         dask distributed --upgrade \
+		        paramiko \
+	         yapf \
+		        bokeh \
+	         graphviz \
+	         pydotplus
+
 # Enable nbextension and extensions
 RUN jupyter contrib nbextension install && \
     jupyter nbextension enable hinterland/hinterland && \
@@ -89,8 +89,7 @@ RUN jupyter contrib nbextension install && \
 # Generate jupyter notebook config
 RUN jupyter notebook --generate-config
 
-# Add Tini. Tini operates as a process subreaper for jupyter. This prevents
-# kernel crashes.
+# Setup tini
 ENV TINI_VERSION v0.18.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
 RUN chmod +x /usr/bin/tini
