@@ -67,7 +67,7 @@ RUN pip3 install jupyter \
 	         graphviz \
 	         pydotplus \
 		 xgboost \
-		 py_translator
+		 translate
 
 # Enable nbextension and extensions
 RUN jupyter contrib nbextension install && \
