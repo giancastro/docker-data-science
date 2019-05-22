@@ -84,7 +84,8 @@ RUN jupyter contrib nbextension install && \
     jupyter nbextension enable keyboard_shortcut_editor/main && \
     jupyter nbextension enable spellchecker/main && \
     jupyter nbextension enable scratchpad/main && \
-    jupyter nbextension enable tree-filter/index
+    jupyter nbextension enable tree-filter/index && \
+    jupyter nbextension enable toc2/main
     
 # Generate jupyter notebook config
 RUN jupyter notebook --generate-config
