@@ -61,11 +61,12 @@ RUN pip3 install jupyter \
 	         pyspark \
 	         requests \
 	         dask distributed --upgrade \
-		        paramiko \
+		 paramiko \
 	         yapf \
-		        bokeh \
+		 bokeh \
 	         graphviz \
-	         pydotplus
+	         pydotplus \
+		 xgboost
 
 # Enable nbextension and extensions
 RUN jupyter contrib nbextension install && \
