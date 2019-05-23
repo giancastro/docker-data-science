@@ -66,7 +66,8 @@ RUN pip3 install jupyter \
 		 bokeh \
 	         graphviz \
 	         pydotplus \
-		 xgboost
+		 xgboost \
+		 nltk
 
 # Enable nbextension and extensions
 RUN jupyter contrib nbextension install && \
