@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
+ENV DEBIAN_FRONTEND noninteractive
 
 # Install OS dependencies
-ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \ 
     apt-get -yq dist-upgrade && \
     apt-get install -yq --no-install-recommends bzip2 \
@@ -35,11 +35,11 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
 RUN cd /tmp && \
     wget -q  https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz && \
          tar xzf spark-2.4.0-bin-hadoop2.7.tgz -C /usr/local && \
-         rm spark-2.4.0-bin-hadoop2.7.tgz
+         rm spark-2.4.0-bin-hadoop2.7.tgz && \
+	 cd /usr/local && ln -s spark-2.4.0-bin-hadoop2.7 spark
 
-# Setup spark
-RUN cd /usr/local && ln -s spark-2.4.0-bin-hadoop2.7 spark && \
-    export SPARK_HOME=/usr/local/spark && \
+# Configure spark environment
+RUN export SPARK_HOME=/usr/local/spark && \
     export PATH=$SPARK_HOME/bin:$PATH
 
 # Upgrade Pip
@@ -69,7 +69,7 @@ RUN pip3 install jupyter \
 		 xgboost \
 		 nltk
 
-# Enable nbextension and extensions
+# Install nbextension and enable extensions
 RUN jupyter contrib nbextension install && \
     jupyter nbextension enable hinterland/hinterland && \
     jupyter nbextension enable autosavetime/main && \
